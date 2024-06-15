@@ -44,7 +44,7 @@ const CategoryItem = ({ title, index, handleCategory, isActive }) => {
       </Pressable>
     </Animated.View>
   );
-};
+}; 
 
 const styles = StyleSheet.create({
   flatListContainer: {
