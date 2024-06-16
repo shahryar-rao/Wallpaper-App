@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     borderCurve:"continous"
   },spacing:{
     marginRight: wp(2)
-  }
+  } 
 });
 export default ImageCard;
+  
