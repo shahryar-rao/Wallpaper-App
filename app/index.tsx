@@ -15,7 +15,7 @@ export default function Index() {
   const router = useRouter()
   return (
     <View style={styles.container}>
-      <StatusBar barStyle={"default"} />
+      {/* <StatusBar barStyle={"default"} /> */}
       <Image
         resizeMode="cover"
         style={styles.bgImage}
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   startText: {
     color: theme.colors.white,
     letterSpacing: 1,
-    fontSize: hp(2),
+    fontSize: hp(2.5),
     fontWeight: "semibold",
   },
 });

@@ -6,6 +6,7 @@ import {
   FontAwesome6,
   Ionicons,
 } from "@expo/vector-icons";
+import ImageGrid from "../components/ImageGrid"
 import React, { useEffect, useRef, useState } from "react";
 import {
   Pressable,
@@ -33,7 +34,7 @@ const home = () => {
   useEffect(()=>{
   fetchImages()
   },[])
-  const fetchImages= async (params={page:1},append=true)=>{
+  const fetchImages= async (params={page:1},append=false)=>{
     let res = await getPictures(params)
      if(res.success && res?.data?.hits){
       if(append)
@@ -58,7 +59,7 @@ const home = () => {
             />
           </Pressable>
         </View>
-        <ScrollView contentContainerStyle={{ gap: 15 }}>
+        <ScrollView contentContainerStyle={{ gap: 15 }} overScrollMode="never">
           {/* SEARCH BAR */}
           <View style={styles.searchBar}>
             <View style={styles.searchIcon}>
@@ -85,6 +86,9 @@ const home = () => {
             </Pressable>}
           </View>
           <Categories category={category} handleCategory={handleCategory}/>
+          <View>
+            {images.length>0 && <ImageGrid images={images}/>}
+          </View>
         </ScrollView>
       </View>
     </>

@@ -1,6 +1,6 @@
 import axios from "axios"
 const API_KEY="44410980-4210ae78ab8f64418d423364d"
-const API_URL=`https://pixabay.com/api/videos/?key=${API_KEY}`
+const API_URL=`https://pixabay.com/api/?key=${API_KEY}`
 
 const formatUrl = (params)=>{
     let url = API_URL+"&per_page=25&safesearch=true&editors_choice=true"
@@ -18,6 +18,7 @@ export const getPictures = async (params)=>{
     try {
      const response =   await axios.get(formatUrl(params))
      let {data} = response
+     console.log("get Pictures",data)
         return {success: true,data}
     } catch (error) {
         console.log(error)
