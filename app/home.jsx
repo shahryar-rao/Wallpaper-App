@@ -6,7 +6,7 @@ import {
   FontAwesome6,
   Ionicons,
 } from "@expo/vector-icons";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -16,6 +16,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import {getPictures} from "../app/api/index"
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Categories from "../components/Categories"
 const home = () => {
@@ -25,8 +26,21 @@ const home = () => {
   const [category, setCategory] = useState(null)
   const searchInputRef = useRef(null)
 
+  const [images,setImages] = useState([])
   const handleCategory = (cat) =>{
     setCategory(cat)
+  }
+  useEffect(()=>{
+  fetchImages()
+  },[])
+  const fetchImages= async (params={page:1},append=true)=>{
+    let res = await getPictures(params)
+     if(res.success && res?.data?.hits){
+      if(append)
+           setImages([...images,...res.data.hits])
+      else
+           setImages([...res.data.hits])
+     }
   }
   return (
     <>
