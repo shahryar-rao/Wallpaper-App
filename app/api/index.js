@@ -10,7 +10,6 @@ const formatUrl = (params)=>{
         let value = key == 'q'? encodeURIComponent(params[key]) : params[key]
         url += `&${key}=${value}`;
     });
-    console.log('final url: ',url)
     return url
 }
 
@@ -18,7 +17,6 @@ export const getPictures = async (params)=>{
     try {
      const response =   await axios.get(formatUrl(params))
      let {data} = response
-     console.log("get Pictures",data)
         return {success: true,data}
     } catch (error) {
         console.log(error)

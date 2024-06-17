@@ -6,8 +6,8 @@ import {
   FontAwesome6,
   Ionicons,
 } from "@expo/vector-icons";
-import ImageGrid from "../components/ImageGrid"
-import React, { useEffect, useRef, useState } from "react";
+import ImageGrid from "../components/ImageGrid";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -17,34 +17,65 @@ import {
   TextInput,
   View,
 } from "react-native";
-import {getPictures} from "../app/api/index"
+import { getPictures } from "../app/api/index";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Categories from "../components/Categories"
+import Categories from "../components/Categories";
+import { debounce } from "lodash";
+
+var page = 1;
 const home = () => {
   const { top } = useSafeAreaInsets();
   const paddingTop = top > 0 ? top + 20 : 30;
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState(null)
-  const searchInputRef = useRef(null)
+  const [category, setCategory] = useState(null);
+  const searchInputRef = useRef(null);
 
-  const [images,setImages] = useState([])
-  const handleCategory = (cat) =>{
-    setCategory(cat)
-  }
-  useEffect(()=>{
-  fetchImages()
-  },[])
-  const fetchImages= async (params={page:1},append=false)=>{
-    let res = await getPictures(params)
-     if(res.success && res?.data?.hits){
-      if(append)
-           setImages([...images,...res.data.hits])
-      else
-           setImages([...res.data.hits])
-     }
-  }
+  const [images, setImages] = useState([]);
+  const handleCategory = (cat) => {
+    setCategory(cat);
+    clearSearch();
+    setImages([]);
+    page = 1;
+    let params = {
+      page,
+    };
+    if (cat) params.category = cat;
+    fetchImages(params, false);
+  };
+  useEffect(() => {
+    fetchImages();
+  }, []);
+  const fetchImages = async (params = { page: 1 }, append = false) => {
+    let res = await getPictures(params);
+    if (res.success && res?.data?.hits) {
+      if (append) setImages([...images, ...res.data.hits]);
+      else setImages([...res.data.hits]);
+    }
+  };
+  const handleSearch = (text) => {
+    setCategory(null);  
+
+    setSearch(text);
+    if (text.length > 2) {
+      setImages([]);
+      fetchImages({ page, q: text }, false);
+    }
+    if (text == "") {
+      page = 1;
+      searchInputRef?.current?.clear();
+      setImages([]);
+      fetchImages({ page }, false);
+
+    }
+  };
+  const clearSearch = (text) => {
+    setSearch(text);
+    searchInputRef?.current?.clear();
+  };
+  const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
   return (
     <>
+    <StatusBar barStyle={"dark-content"} />
       <View style={[{ paddingTop }]}>
         {/* HEADER */}
         <View style={styles.header}>
@@ -72,23 +103,25 @@ const home = () => {
             <TextInput
               placeholder="Search for photos..."
               style={styles.searchInput}
-              value={search}
-              onChangeText={search=>setSearch(search)}
+              onChangeText={handleTextDebounce}
               ref={searchInputRef}
             />
 
-           {search && <Pressable style={styles.closeIcon}>
-              <Ionicons
-                name="close"
-                size={24}
-                color={theme.colors.neutral(0.6)}
-              />
-            </Pressable>}
+            {search && (
+              <Pressable
+                onPress={() => handleSearch("")}
+                style={styles.closeIcon}
+              >
+                <Ionicons
+                  name="close"
+                  size={24}
+                  color={theme.colors.neutral(0.6)}
+                />
+              </Pressable>
+            )}
           </View>
-          <Categories category={category} handleCategory={handleCategory}/>
-          <View>
-            {images.length>0 && <ImageGrid images={images}/>}
-          </View>
+          <Categories category={category} handleCategory={handleCategory} />
+          <View>{images.length > 0 && <ImageGrid images={images} />}</View>
         </ScrollView>
       </View>
     </>
