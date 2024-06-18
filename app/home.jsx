@@ -29,6 +29,7 @@ const home = () => {
   const paddingTop = top > 0 ? top + 20 : 30;
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState(null);
+  const [filter, setfilter] = useState(null);
   const searchInputRef = useRef(null);
   const modalRef = useRef(null);
 
@@ -78,6 +79,14 @@ const home = () => {
   }
   const closeFilterModal = ()=>{
     modalRef?.current?.close()
+  }
+  const applyFilters = ()=>{
+    console.log("applyFilters");
+    closeFilterModal()
+  }
+  const resetFilters = ()=>{
+    console.log("resetFilters");
+    closeFilterModal()
   }
   const handleTextDebounce = useCallback(debounce(handleSearch, 400), []);
   return (
@@ -130,7 +139,7 @@ const home = () => {
           <Categories category={category} handleCategory={handleCategory} />
           <View>{images.length > 0 && <ImageGrid images={images} />}</View>
         </ScrollView>
-        <FiltersModal modalRef={modalRef} />
+        <FiltersModal modalRef={modalRef} filter={filter} setfilter={setfilter} onClose={closeFilterModal} onApply={applyFilters} onReset={resetFilters}/>
       </View>
     </>
   );

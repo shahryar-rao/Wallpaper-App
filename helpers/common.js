@@ -27,3 +27,7 @@ export const getImageSize = (width,height)=>{
         return 200
     }
 }
+
+export const captilize = str =>{
+    return str.charAt(0).toUpperCase() + str.slice(1)
+}
