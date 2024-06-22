@@ -31,7 +31,7 @@ const FiltersModal = ({
           {Object.keys(sections).map((sectionName, index) => {
             let sectionView = sections[sectionName];
             let sectionData = data.filters[sectionName];
-            let title = captilize(sectionName);
+            let title = captilize(sectionName); 
             return (
               <Animated.View entering={FadeInDown.delay((index*100)+100).springify().damping(11)} key={sectionName}>
                 <SectionView
