@@ -35,7 +35,7 @@ const FiltersModal = ({
             return (
               <Animated.View entering={FadeInDown.delay((index*100)+100).springify().damping(11)} key={sectionName}>
                 <SectionView
-                  title={title}
+                  title={title} 
                   content={sectionView({
                     data: sectionData,
                     filter,
