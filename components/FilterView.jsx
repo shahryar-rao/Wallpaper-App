@@ -20,7 +20,7 @@ export const CommonFilterView = ({ data, filterName, filter, setfilter }) => {
         data.map((item, index) => {
           let isActive = filter && filter[filterName] == item;
           let backgroundColor = isActive ? theme.colors.neutral(0.7) : "white";
-          let color = isActive ? theme.colors.white : theme.colors.neutral(0.4);
+          let color = isActive ? theme.colors.white : theme.colors.neutral(0.8);
           return (
             <Pressable
             onPress={()=>onSelect(item)}
@@ -30,6 +30,30 @@ export const CommonFilterView = ({ data, filterName, filter, setfilter }) => {
               <Text style={[styles.outlinedButtonText, {color}]}>
                 {captilize(item)}
               </Text>
+            </Pressable>
+          );
+        })}
+    </View>
+  );
+};
+export const ColorFilter = ({ data, filterName, filter, setfilter }) => {
+  const onSelect = (item)=>{
+    setfilter({...filter,[filterName]:item})
+  }
+  return (
+    <View style={styles.flexRowWrap}>
+      {data &&
+        data.map((item, index) => {
+          let isActive = filter && filter[filterName] == item;
+          let borderColor = isActive? theme.colors.neutral(0.4) : "white"
+          return (
+            <Pressable
+            onPress={()=>onSelect(item)}
+              key={index}
+            >
+              <View style={[styles.colorWrapper,{borderColor}]}>
+                <View style={[styles.color,{backgroundColor:item}]}></View>
+              </View>
             </Pressable>
           );
         })}
@@ -58,6 +82,15 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.xs,
     borderCurve: "continuous",
   },outlinedButtonText:{
-
+    
+  },color:{
+    borderCurve: "continuous",
+    height: 30, width: 40, borderRadius: theme.radius.sm-3,
+  },
+  colorWrapper:{
+    padding: 3,
+    borderRadius: theme.radius.sm,
+    borderWidth: 2,
+    borderCurve: "continuous",
   }
 });
